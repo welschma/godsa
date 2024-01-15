@@ -241,7 +241,7 @@ func (ll *LinkedList[T]) Remove(t T) bool {
 		return false
 	}
 
-	t, err := ll.removeNode(node)
+	_, err := ll.removeNode(node)
 
 	return err == nil
 }
