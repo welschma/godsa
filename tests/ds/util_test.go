@@ -9,11 +9,14 @@ import (
 
 func TestResizeSlice(t *testing.T) {
 	t.Run("resize to larger capacity", func(t *testing.T) {
+		defer func() {
+			if r := recover(); r != nil {
+				t.Fatalf("Expected no panic, got %v", r)
+			}
+		}()
+
 		slice := []int{1, 2, 3}
-		newSlice, err := ds.ResizeSlice(slice, 5)
-		if err != nil {
-			t.Fatalf("Expected no error, got %v", err)
-		}
+		newSlice := ds.ResizeSlice(slice, 5)
 		if len(newSlice) != 5 {
 			t.Errorf("Expected length 5, got %d", len(newSlice))
 		}
@@ -23,18 +26,24 @@ func TestResizeSlice(t *testing.T) {
 	})
 
 	t.Run("resize to smaller capacity", func(t *testing.T) {
+		defer func() {
+			if r := recover(); r == nil {
+				t.Fatalf("Expected a panic, got nil")
+			}
+		}()
+
 		slice := []int{1, 2, 3}
-		_, err := ds.ResizeSlice(slice, 2)
-		if err == nil {
-			t.Fatalf("Expected an error, got nil")
-		}
+		ds.ResizeSlice(slice, 2)
 	})
 
 	t.Run("resize to negative capacity", func(t *testing.T) {
+		defer func() {
+			if r := recover(); r == nil {
+				t.Fatalf("Expected a panic, got nil")
+			}
+		}()
+
 		slice := []int{1, 2, 3}
-		_, err := ds.ResizeSlice(slice, -1)
-		if err == nil {
-			t.Fatalf("Expected an error, got nil")
-		}
+		ds.ResizeSlice(slice, -1)
 	})
 }

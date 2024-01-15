@@ -1,5 +1,7 @@
 package ds
 
+import "fmt"
+
 const (
 	INITIAL_BAG_CAPACITY int = 32
 )
@@ -12,15 +14,16 @@ type ArrayBag[T any] struct {
 }
 
 // Add adds the given item to the bag.
-func (b *ArrayBag[T]) Add(item T) {
+func (b *ArrayBag[T]) Add(item T) error {
 
 	if b.n == cap(b.items) {
-		ResizeSlice[T](b.items, 2*cap(b.items))
+		b.items = ResizeSlice[T](b.items, 2*cap(b.items))
 	}
 
 	b.items[b.n] = item
 	b.n += 1
 
+	return nil
 }
 
 // Size returns the number of items in the bag.
@@ -43,7 +46,7 @@ func (b *ArrayBag[T]) CreateIterator() Iterator[T] {
 	return &ArrayBagIterator[T]{
 		items:        b.items,
 		currentIndex: 0,
-		maxIndex: b.n,
+		maxIndex:     b.n,
 	}
 }
 
@@ -58,7 +61,7 @@ func NewArrayBag[T any]() ArrayBag[T] {
 type ArrayBagIterator[T any] struct {
 	items        []T
 	currentIndex int
-	maxIndex	 int
+	maxIndex     int
 }
 
 // HasNext returns true if there are more items to iterate over, false otherwise.
@@ -66,14 +69,14 @@ func (it *ArrayBagIterator[T]) HasNext() bool {
 	return it.currentIndex < it.maxIndex
 }
 
-func (it *ArrayBagIterator[T]) GetNext() T {
-	var t T
-
-	if it.HasNext() {
-		t = it.items[it.currentIndex]
-		it.currentIndex += 1
-		return t
+// GetNext returns the next item in the iteration.
+func (it *ArrayBagIterator[T]) GetNext() (T, error) {
+	if !it.HasNext() {
+		var t T
+		return t, fmt.Errorf("no more items to iterate over")
 	}
 
-	return t
+	t := it.items[it.currentIndex]
+	it.currentIndex += 1
+	return t, nil
 }

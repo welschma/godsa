@@ -7,33 +7,47 @@ import (
 )
 
 func TestArrayBag(t *testing.T) {
-	bag := ds.NewArrayBag[int]()
+    bag := ds.NewArrayBag[int]() // assuming NewArrayBag takes an initial capacity
 
-	if !bag.IsEmpty() {
-		t.Errorf("New bag should be empty")
-	}
+    for i := 0; i < 10; i++ {
+        bag.Add(i)
+    }
 
-	bag.Add(1)
-	if bag.Size() != 1 {
-		t.Errorf("Bag size should be 1 after adding an item")
-	}
-	if bag.IsEmpty() {
-		t.Errorf("Bag should not be empty after adding an item")
-	}
+    if bag.Size() != 10 {
+        t.Errorf("Expected size 10, got %d", bag.Size())
+    }
 
-	bag.Add(2)
-	if bag.Size() != 2 {
-		t.Errorf("Bag size should be 2 after adding a second item")
-	}
+    if bag.IsEmpty() {
+        t.Errorf("Expected bag not to be empty")
+    }
 
-	// Test iterator
-	iterator := bag.CreateIterator()
-	count := 0
-	for iterator.HasNext() {
-		_ = iterator.GetNext()
-		count++
-	}
-	if count != 2 {
-		t.Errorf("Iterator should iterate over 2 items")
-	}
+    if bag.Capacity() < 10 {
+        t.Errorf("Expected capacity at least 10, got %d", bag.Capacity())
+    }
+
+    // Test iterator
+    iterator := bag.CreateIterator() // assuming ArrayBag has an Iterator method
+    for i := 0; i < 10; i++ {
+        if !iterator.HasNext() {
+            t.Errorf("Expected iterator to have next at index %d", i)
+        }
+
+        next, err := iterator.GetNext()
+        if err != nil {
+            t.Fatalf("Expected no error, got %v", err)
+        }
+
+        if next != i {
+            t.Errorf("Expected %d, got %d", i, next)
+        }
+    }
+
+    if iterator.HasNext() {
+        t.Errorf("Expected iterator to have no next after 10 items")
+    }
+
+    _, err := iterator.GetNext()
+    if err == nil {
+        t.Fatalf("Expected error, got nil")
+    }
 }

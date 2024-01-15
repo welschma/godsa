@@ -1,7 +1,7 @@
 package ds 
 
 type Iterator[T any] interface {
-    GetNext() T
+    GetNext() (T, error)
     HasNext() bool
 }
 
