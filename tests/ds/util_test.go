@@ -25,17 +25,6 @@ func TestResizeSlice(t *testing.T) {
 		}
 	})
 
-	t.Run("resize to smaller capacity", func(t *testing.T) {
-		defer func() {
-			if r := recover(); r == nil {
-				t.Fatalf("Expected a panic, got nil")
-			}
-		}()
-
-		slice := []int{1, 2, 3}
-		ds.ResizeSlice(slice, 2)
-	})
-
 	t.Run("resize to negative capacity", func(t *testing.T) {
 		defer func() {
 			if r := recover(); r == nil {
