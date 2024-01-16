@@ -117,6 +117,7 @@ func (ht *HashTable[K, V]) Get(key string) (V, error) {
 	return v, fmt.Errorf("key not found")
 }
 
+// Delete deletes a key-value pair from the hash table using linear probing
 func (ht *HashTable[K, V]) Delete(key string) bool {
 	for i := 0; i < ht.capacity; i++ {
 		index := ht.hash(key, i)
