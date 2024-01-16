@@ -1,6 +1,6 @@
 package ds
 
-
+// binaryNode is a node in a binary tree.
 type binaryNode[K any, V any] struct {
     key K
     value V
@@ -10,6 +10,7 @@ type binaryNode[K any, V any] struct {
     n int
 }
 
+// size returns the number of nodes in the subtree rooted at the node.
 func (node *binaryNode[K, V]) size() int {
 
     if node == nil {
@@ -19,6 +20,7 @@ func (node *binaryNode[K, V]) size() int {
     return node.n
 }
 
+// deleteMin deletes the minimum node in the subtree rooted at the node.
 func (node *binaryNode[K, V]) deleteMin() *binaryNode[K, V] {
 
     if node.left == nil {
@@ -35,6 +37,7 @@ func (node *binaryNode[K, V]) deleteMin() *binaryNode[K, V] {
     return node
 }
 
+// deleteMax deletes the maximum node in the subtree rooted at the node.
 func (node *binaryNode[K, V]) deleteMax() *binaryNode[K, V] {
 
     if node.right == nil {
@@ -55,6 +58,7 @@ func (node *binaryNode[K, V]) deleteMax() *binaryNode[K, V] {
     return node
 }
 
+// put inserts a new node into the subtree rooted at the node.
 func (node *binaryNode[K, V]) put(k K, v V, p *binaryNode[K, V], compareKeyFn func(newKey K, currentKey K) int) *binaryNode[K, V] {
 
     if node == nil {
@@ -76,6 +80,7 @@ func (node *binaryNode[K, V]) put(k K, v V, p *binaryNode[K, V], compareKeyFn fu
     return node
 }
 
+// get returns the value associated with the given key in the subtree rooted at the node.
 func (node *binaryNode[K, V]) get(k K, compareKeyFn func(newKey K, currentKey K) int) (V, bool) {
 
     if node == nil {
@@ -96,6 +101,7 @@ func (node *binaryNode[K, V]) get(k K, compareKeyFn func(newKey K, currentKey K)
     return node.value, true
 }
 
+// min returns the minimum node in the subtree rooted at the node.
 func (node *binaryNode[K, V]) min() *binaryNode[K, V] {
 
     if node.left == nil {
@@ -104,6 +110,8 @@ func (node *binaryNode[K, V]) min() *binaryNode[K, V] {
 
     return node.left.min()
 }
+
+// delete deletes the node with the given key in the subtree rooted at the node.
 func (node *binaryNode[K, V]) delete(k K, compareKeyFn func(newKey K, currentKey K) int) *binaryNode[K, V] {
 
     if node == nil {
@@ -149,6 +157,7 @@ func (node *binaryNode[K, V]) delete(k K, compareKeyFn func(newKey K, currentKey
 
 }
 
+// keys returns the keys in the subtree rooted at the node.
 func (node *binaryNode[K, V]) keys(keySlice []K) []K {
 
     if node != nil {
@@ -160,6 +169,7 @@ func (node *binaryNode[K, V]) keys(keySlice []K) []K {
     return keySlice
 }
 
+// values returns the values in the subtree rooted at the node.
 func (node *binaryNode[K, V]) values(valueSlice []V) []V {
 
     if node != nil {
@@ -171,51 +181,63 @@ func (node *binaryNode[K, V]) values(valueSlice []V) []V {
     return valueSlice
 }
 
+// BinarySearchTree is a binary search tree.
 type BinarySearchTree[K any, V any] struct {
     root *binaryNode[K, V]
     compareKeyFn func(newKey K, currentKey K) int
 }
 
+// Size returns the number of nodes in the tree.
 func (bst *BinarySearchTree[K, V]) Size() int {
     return bst.root.size()
 }
 
+// IsEmpty returns true if the tree is empty, false otherwise.
 func (bst *BinarySearchTree[K, V]) IsEmpty() bool {
     return bst.root == nil
 }
 
+// Put inserts a new node into the tree.
 func (bst *BinarySearchTree[K, V]) Put(key K, value V) {
     bst.root = bst.root.put(key, value, nil, bst.compareKeyFn)
 }
 
+// Get returns the value associated with the given key in the tree.
 func (bst *BinarySearchTree[K, V]) Get(key K) (V, bool) {
     return bst.root.get(key, bst.compareKeyFn)
 }
 
+// Delete deletes the node with the given key in the tree.
 func (bst *BinarySearchTree[K, V]) Delete(key K) {
     bst.root = bst.root.delete(key, bst.compareKeyFn)
 }
 
+// Keys returns the keys in the tree.
 func (bst *BinarySearchTree[K, V]) Keys() []K {
     return bst.root.keys([]K{})
 }
 
+// Values returns the values in the tree.
 func (bst *BinarySearchTree[K, V]) Values() []V {
     return bst.root.values([]V{})
 }
 
+// DeleteMin deletes the minimum node in the tree.
 func (bst *BinarySearchTree[K, V]) DeleteMin() {
     bst.root = bst.root.deleteMin()
 }
 
+// DeleteMax deletes the maximum node in the tree.
 func (bst *BinarySearchTree[K, V]) DeleteMax() {
     bst.root = bst.root.deleteMax()
 }
-
+ 
+// Clear removes all nodes from the tree.
 func (bst *BinarySearchTree[K, V]) Clear() {
     bst.root = nil
 }
 
+// NewBinarySearchTree returns a new binary search tree.
 func NewBinarySearchTree[K any, V any](compareKeyFn func(K1 K, K2 K) int) BinarySearchTree[K,V] {
     return BinarySearchTree[K, V]{compareKeyFn: compareKeyFn}
 }
