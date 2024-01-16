@@ -305,7 +305,7 @@ func TestBinaryDelete(t *testing.T) {
 	bst.Put(120, "hundred-twenty")
 	bst.Delete(110)
 
-	keysExp = []int{100,120}
+	keysExp = []int{100, 105, 120}
 	keysGot = bst.Keys()
 
 	if !reflect.DeepEqual(keysExp, keysGot) {
