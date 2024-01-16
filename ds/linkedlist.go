@@ -352,7 +352,7 @@ func (ll *LinkedList[T]) removeNode(node *listNode[T]) (T, error) {
 // an error is returned.
 func (ll *LinkedList[T]) getNodeAt(index int) (*listNode[T], error) {
 	if index < 0 || index >= ll.size {
-		return nil, fmt.Errorf("Index %d is out of bounds for a list of size %d", index, ll.size)
+		return nil, fmt.Errorf("index %d is out of bounds for a list of size %d", index, ll.size)
 	}
 
 	x := ll.sentinel.next
